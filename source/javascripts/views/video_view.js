@@ -5,30 +5,33 @@ VIDEO.VIEW = (function(window){
 
 	view.listenChannelClick = function(){
 
-		var myPlayer = videojs("video")
+		var vidPlayer = videojs("video");
 
 		$("#play").click(function(){
-			myPlayer.play();
+			vidPlayer.play();
 		});
 
 		$("#time").click(function(){
 
-			myPlayer.currentTime(100);
-
-			timeRange = myPlayer.buffered();
-
-			console.log(timeRange);
-
-			
+			vidPlayer.currentTime(100);
 		})
 
-		$("#event").click(function(){
-			timeRange = myPlayer.buffered();
+		vidPlayer.on("seeking", function(){
+			console.log("seeking")
+			$("#status").html("seeking");
+			document.getElementById('audio').play();
 		})
+
+		vidPlayer.on("canplay", function(){
+			console.log("canplay")
+			$("#status").html("starting");
+			document.getElementById('audio').pause();
+		})
+
 	};
 
 	view.init = function(){
-		var myPlayer = videojs("video");
+		var vidPlayer = videojs("video");
 
 		view.listenChannelClick();
 	};
