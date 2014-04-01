@@ -15,25 +15,49 @@ $skew : 80;
 		//top: -50%;
 		pointer-events: none;
 	}
+	.iPhone &{
+		top: -100%;
+	}
 }
 
 nav{
-	border-radius: 50%;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	z-index: 10;
-	margin-top: -225px;
-	margin-left: -225px;
-	width: 450px;
-	height: 450px;
-	border-radius: 50%;
-	background: transparent;
-	overflow: hidden;
-	@media all and (max-width: 1100px){
-		width: 400px;
-		height: 400px;
-		margin-left: -200px;
+	#svg-wheel{
+		width: 300px;
+		height: 300px;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		margin-left: -150px;
+		margin-top: -150px;
+		.arc{
+			cursor: pointer;
+			.selector{
+				opacity: 0;
+				transition: all 0.5s;
+			}
+		}
+	}
+	#non-svg-wheel{
+		border-radius: 50%;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		z-index: 10;
+		margin-top: -225px;
+		margin-left: -225px;
+		width: 450px;
+		height: 450px;
+		border-radius: 50%;
+		background: transparent;
+		overflow: hidden;
+		@media all and (max-width: 1100px){
+			width: 400px;
+			height: 400px;
+			margin-left: -200px;
+		}
+		.svg &{
+			display: none;
+		}
 	}
 	li{
 		border: 1px solid transparent;

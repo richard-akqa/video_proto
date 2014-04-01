@@ -4,19 +4,67 @@ VIDEO.VIEW = (function(window){
 	var view = {};
 
 	var _ua = navigator.userAgent
+		, _windowWidth = $(window).innerWidth()
+		, _windowHeight = $(window).innerHeight()
 		, _isMobile = {
 			Android: _ua.match(/Android/i)
 			,BlackBerry: _ua.match(/BlackBerry/i)
-			,iOS: _ua.match(/iPhone|iPod|iPad/i)
+			,iPad: _ua.match(/iPad/i)
+			,iPhone: _ua.match(/iPhone/i)
 			,Opera: _ua.match(/Opera Mini/i)
 			,Windows: _ua.match(/IEMobile/i)
 			,Smartphone: _ua.match(/Android|BlackBerry|iPhone|iPod|Opera Mini|IEMobile/i)
 		}
-		, _isAnyMobile = _isMobile.Android || _isMobile.BlackBerry  || _isMobile.iOS  || _isMobile.Opera || _isMobile.Windows
+		, _isAnyMobile = _isMobile.Android || _isMobile.BlackBerry  || _isMobile.iPhone  || _isMobile.Opera || _isMobile.Windows
+		, _isSVG = $("html").hasClass("svg")
 		, _fadeInInterval
 		, _fadeOutInterval
 		, _vol = 0
 		, _isFirstPlay = false;
+
+	view.androidVersion = function(){
+
+		var version = undefined;
+
+		if( _isMobile.Android ) {
+			version = parseFloat(_ua.slice(_ua.indexOf("Android")+8));
+		}
+		return version;
+	}
+
+	view.addMobileClass = function(windowWidth){
+
+		var androidVersion = view.androidVersion();
+
+		if (androidVersion <= 2.3){
+			$("html").addClass("device-mobile");
+			$("html").addClass("old-android");
+
+		} else if(androidVersion > 2.3){
+			$("html").addClass("device-mobile");
+			$("html").addClass("new-android");
+
+		} else if (_isMobile.iOS) {
+			$("html").addClass("device-mobile");
+			$("html").addClass("ios-mobile");
+
+		} else {
+			$("html").addClass("device-desktop");
+		}
+
+		if(_isMobile.iPhone){
+			$("html").addClass("iPhone");
+		}
+
+		if (_windowWidth > 985){
+			$("html").removeClass("screen-lt-985");
+			$("html").addClass("screen-bt-985");
+		} else if (_windowWidth <= 985) {
+			$("html").removeClass("screen-bt-985");
+			$("html").addClass("screen-lt-985");
+		}
+
+	}
 
 	view.audioFadeIn = function(audioPlayer){
 		clearInterval(_fadeOutInterval);
@@ -97,48 +145,8 @@ VIDEO.VIEW = (function(window){
 		}
 	}
 
-	view.listenChannelClick = function(){
-
-		if(!_isAnyMobile){
-			$(".time").click(function(){
-				var time = $(this).data("time");
-				view.onSeekChannel(time);
-				$(".time").removeClass('playing');
-				$(this).addClass('playing');
-			});
-
-			$(".time").on("mousemove", function(){
-				$(".time").removeClass('selected');
-				$(this).addClass('selected');
-			});
-		} else {
-
-			$(".time").on("touchmove", function(){
-				$(this).addClass('selected');
-			});
-
-			$(".time").on("touchend", function(){
-				var time = $(this).data("time");
-				$(".time").removeClass('playing');
-				$(this).addClass('playing');
-				view.onSeekChannel(time);
-				console.log("mobile touchend");
-			});
-		}		
-	};
-
-	view.addChannelInit = function(){
-		var countriesNum = 31;
-		
-		for (var i=0; i< countriesNum; i++){
-			var dataTime = 'data-time="' + 60 * (i+1) + '"';
-			$("nav ul").append('<li><a href="#" '+ dataTime +' class="time"></a></li>')
-		}		
-	}
-
 	view.init = function(){
-		view.addChannelInit();
-		view.listenChannelClick();
+		view.addMobileClass();
 	};
 
 	$(document).ready(
