@@ -2,6 +2,10 @@ $deg : (360/31); //11.25
 $skew : 90 - $deg;
 $skew : 80;
 
+body{
+	background: black;
+}
+
 #video{
 	width: 100% !important;
 	height: 100% !important;
