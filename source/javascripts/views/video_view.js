@@ -62,6 +62,9 @@ VIDEO.VIEW = (function(window){
 		var vidPlayer = videojs("video"),
 			channel = undefined;
 
+		currentTime = vidPlayer.currentTime();
+		time = time + currentTime%60;
+
 		function onProgressSeek(){
 
 			vidPlayer.one("progress", function(){
@@ -69,8 +72,6 @@ VIDEO.VIEW = (function(window){
 				_isFirstPlay = true;
 			});
 		}
-
-		currentTime = vidPlayer.currentTime();
 
 		if(!_isAnyMobile){
 			if(currentTime == 0){
@@ -91,7 +92,6 @@ VIDEO.VIEW = (function(window){
 				});
 			} else {
 				//this is for 2nd play in mobile
-				console.log("hello2");
 				onProgressSeek();
 			}
 		}
@@ -99,28 +99,45 @@ VIDEO.VIEW = (function(window){
 
 	view.listenChannelClick = function(){
 
-		$("#time").click(function(){
-			view.onSeekChannel(50);
-		})
+		if(!_isAnyMobile){
+			$(".time").click(function(){
+				var time = $(this).data("time");
+				view.onSeekChannel(time);
+				$(".time").removeClass('playing');
+				$(this).addClass('playing');
+			});
 
-		$("#time2").click(function(){
-			view.onSeekChannel(70);
-		})
+			$(".time").on("mousemove", function(){
+				$(".time").removeClass('selected');
+				$(this).addClass('selected');
+			});
+		} else {
 
-		$("#time3").click(function(){
-			view.onSeekChannel(100);
-		})
+			$(".time").on("touchmove", function(){
+				$(this).addClass('selected');
+			});
 
-		$("#time4").click(function(){
-			view.onSeekChannel(110);
-		})
-
-		$("#time5").click(function(){
-			view.onSeekChannel(130);
-		})
+			$(".time").on("touchend", function(){
+				var time = $(this).data("time");
+				$(".time").removeClass('playing');
+				$(this).addClass('playing');
+				view.onSeekChannel(time);
+				console.log("mobile touchend");
+			});
+		}		
 	};
 
+	view.addChannelInit = function(){
+		var countriesNum = 31;
+		
+		for (var i=0; i< countriesNum; i++){
+			var dataTime = 'data-time="' + 60 * (i+1) + '"';
+			$("nav ul").append('<li><a href="#" '+ dataTime +' class="time"></a></li>')
+		}		
+	}
+
 	view.init = function(){
+		view.addChannelInit();
 		view.listenChannelClick();
 	};
 
