@@ -20,6 +20,12 @@ $skew : 80;
 	}
 }
 
+#country{
+	color: white;
+	margin: 45% auto 0 auto;
+	width: 100px;
+}
+
 nav{
 	#svg-wheel{
 		width: 300px;
@@ -34,6 +40,9 @@ nav{
 			.selector{
 				opacity: 0;
 				transition: all 0.5s;
+				&.selected{
+					opacity: 1;
+				}
 			}
 		}
 	}

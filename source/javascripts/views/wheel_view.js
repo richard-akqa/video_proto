@@ -17,10 +17,7 @@ VIDEO.VIEW = (function(window){
 		}
 		, _isAnyMobile = _isMobile.Android || _isMobile.BlackBerry  || _isMobile.iPhone  || _isMobile.Opera || _isMobile.Windows
 		, _isSVG = $("html").hasClass("svg")
-		, _fadeInInterval
-		, _fadeOutInterval
-		, _vol = 0
-		, _isFirstPlay = false;
+		, _wheelMotionInterval;
 
 	view.androidVersion = function(){
 
@@ -83,8 +80,17 @@ VIDEO.VIEW = (function(window){
 			.attr("class", "selector")
 			.attr("fill", "transparent")
 			.attr("d", arc2)
-			.style("stroke", "red");
+			.style({"stroke": "white", "stroke-width": 2});
 
+	}
+
+	view.onSelectorUpdate = function(node){
+
+		var time = $(node).data("time");
+
+		$(".selector").attr("class", "selector");
+		$(node).attr("class", "selector selected");
+		$("#country").html(time);
 	}
 
 	view.listenChannelClick = function(){
@@ -105,21 +111,17 @@ VIDEO.VIEW = (function(window){
 				});
 			} else {
 
-				$(".selector").click(function(){
-					$(".selector").css("opacity", 0);
-					$(this).css("opacity", 1);
-				});
-
 				$(".selector").on("mousedown", function(){
+					clearInterval(_wheelMotionInterval);
 					$(".selector").on("mouseenter", function(){
-						$(".selector").css("opacity", 0);
-						$(this).css("opacity", 1);
+						view.onSelectorUpdate(this);
 					});
 				});
 
 				$(".selector").on("mouseup", function(){
 					var time = $(this).data("time");
 					VIDEO.VIEW.onSeekChannel(time);
+					view.onSelectorUpdate(this);
 					$(".selector").off("mouseenter");
 				});
 			}
@@ -135,10 +137,12 @@ VIDEO.VIEW = (function(window){
 				});
 			} else {
 				$(".selector").on("touchend", function(){
+					clearInterval(_wheelMotionInterval);
+
 					var time = $(this).data("time");
-					$(".selector").css("opacity", 0);
-					$(this).css("opacity", 1);
+
 					VIDEO.VIEW.onSeekChannel(time);
+					view.onSelectorUpdate(this);
 				});
 			}
 			
@@ -162,13 +166,41 @@ VIDEO.VIEW = (function(window){
 		});
 	}
 
+	view.wheelMotionInit = function(){
+		
+    	var randomPicker = Math.floor(Math.random() * (30 - 0 + 1)) + 0,
+    		el = $(".arc").eq(randomPicker).children(".selector");
+
+		view.onSelectorUpdate(el);
+
+		_fadeInInterval = setInterval(function(){
+
+			$nextEl = $(".selected").parents(".arc").next(".arc").children(".selector");
+			
+			$(".selector").attr("class", "selector");
+			$nextEl.attr("class", "selector selected");
+
+			view.onSelectorUpdate($nextEl);
+
+		}, 2000);
+
+		setTimeout(function(){
+			clearInterval(_wheelMotionInterval);
+		}, 30000);
+
+	}
+
+
 	view.init = function(){
 
 		if(!_isSVG){
 			view.addChannelInit();
+			view.listenChannelClick();
 		} else {
 			view.createNavWheel();
+			view.addChannelInit();
 			view.listenChannelClick ();
+			view.wheelMotionInit();
 		}
 	};
 
