@@ -222,7 +222,7 @@ VIDEO.VIEW = (function(window){
 			view.createNavWheel();
 			view.addChannelInit();
 			view.listenChannelClick ();
-			//view.wheelMotionInit();
+			view.wheelMotionInit();
 		}
 	};
 
