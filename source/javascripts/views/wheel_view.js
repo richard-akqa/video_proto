@@ -136,13 +136,31 @@ VIDEO.VIEW = (function(window){
 					VIDEO.VIEW.onSeekChannel(time);
 				});
 			} else {
-				$(".selector").on("touchend", function(){
-					clearInterval(_wheelMotionInterval);
 
-					var time = $(this).data("time");
+				$(".selector").on("touchend", function(event){
+					
+					var pageX = event.originalEvent.changedTouches[0].pageX,
+						pageY = event.originalEvent.changedTouches[0].pageY,
+						endTarget = document.elementFromPoint(pageX, pageY),
+						time = $(this).data("time");
+
+					clearInterval(_wheelMotionInterval);
+					event.preventDefault();
 
 					VIDEO.VIEW.onSeekChannel(time);
-					view.onSelectorUpdate(this);
+					view.onSelectorUpdate(endTarget);
+				});
+
+				$(".selector").on("touchmove", function(event){
+
+					var pageX = event.originalEvent.changedTouches[0].pageX,
+						pageY = event.originalEvent.changedTouches[0].pageY,
+						endTarget = document.elementFromPoint(pageX, pageY);
+
+					clearInterval(_wheelMotionInterval);
+					event.preventDefault();
+
+					view.onSelectorUpdate(endTarget);
 				});
 			}
 			
@@ -160,7 +178,7 @@ VIDEO.VIEW = (function(window){
 
 		$("#svg-wheel svg .arc").each(function(){
 			var dataTime = 60 * index;
-			$(this).attr("class", "arc time");
+			$(this).attr({"class": "arc time", "data-time": dataTime});
 			$(this).children(".selector").attr("data-time", dataTime);
 			index++
 		});
@@ -173,9 +191,13 @@ VIDEO.VIEW = (function(window){
 
 		view.onSelectorUpdate(el);
 
-		_fadeInInterval = setInterval(function(){
+		_wheelMotionInterval = setInterval(function(){
 
 			$nextEl = $(".selected").parents(".arc").next(".arc").children(".selector");
+
+			if(!$nextEl.attr("class")){
+				$nextEl = $(".arc:eq(0) .selector");
+			}
 			
 			$(".selector").attr("class", "selector");
 			$nextEl.attr("class", "selector selected");
@@ -186,7 +208,7 @@ VIDEO.VIEW = (function(window){
 
 		setTimeout(function(){
 			clearInterval(_wheelMotionInterval);
-		}, 30000);
+		}, 10000);
 
 	}
 
@@ -200,7 +222,7 @@ VIDEO.VIEW = (function(window){
 			view.createNavWheel();
 			view.addChannelInit();
 			view.listenChannelClick ();
-			view.wheelMotionInit();
+			//view.wheelMotionInit();
 		}
 	};
 
