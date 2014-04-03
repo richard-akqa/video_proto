@@ -96,7 +96,7 @@ VIDEO.VIEW = (function(window){
 	view.listenChannelClick = function(){
 
 		$("body").click(function(){
-			$("#svg-wheel").removeClass("hide-player");
+			$("nav").removeClass("hide-player");
 		})
 
 		if(!_isAnyMobile){
@@ -188,6 +188,50 @@ VIDEO.VIEW = (function(window){
 		});
 	}
 
+	view.listenVideoControl = function(){
+
+		var vidPlayer = videojs("video"),
+			progressOffsetleft = $(".video-control-progress").offset().left;
+
+		vidPlayer.on("timeupdate", function(){
+			var duration = vidPlayer.duration();
+				currentTime = vidPlayer.currentTime();
+				progressPct = (currentTime/duration)*100;
+
+			$(".video-control-progress span").css("width", progressPct + "%");
+
+		})
+
+		vidPlayer.on("seeking", function(){
+			$(".video-control-play").hide();
+		});
+
+		$(".video-control-play").click(function(){
+
+			var isPaused = vidPlayer.paused();
+
+			if(isPaused){
+				vidPlayer.play();
+				$(this).html("PAUSE");
+			} else {
+				vidPlayer.pause();
+				$(this).html("PLAY");
+			}
+		});
+
+		$(".video-control-progress").click(function(event){
+
+			console.log("Hello");
+			var duration = vidPlayer.duration(),
+				positionX = event.pageX - progressOffsetleft,
+				time = (positionX*duration)/100;
+
+			VIDEO.VIEW.onSeekChannel(time);
+		});
+
+
+	}
+
 	view.wheelMotionInit = function(){
 		
     	var randomPicker = Math.floor(Math.random() * (30 - 0 + 1)) + 0,
@@ -219,15 +263,14 @@ VIDEO.VIEW = (function(window){
 
 	view.init = function(){
 
-		if(!_isSVG){
-			view.addChannelInit();
-			view.listenChannelClick();
-		} else {
+		if(_isSVG){
 			view.createNavWheel();
-			view.addChannelInit();
-			view.listenChannelClick ();
 			view.wheelMotionInit();
 		}
+
+		view.addChannelInit();
+		view.listenChannelClick();
+		view.listenVideoControl();
 	};
 
 	$(document).ready(

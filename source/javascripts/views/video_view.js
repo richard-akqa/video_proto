@@ -117,10 +117,11 @@ VIDEO.VIEW = (function(window){
 
 			vidPlayer.one("progress", function(){
 				vidPlayer.currentTime(time);
+				$(".video-control-play").html("PAUSE");
 				_isFirstPlay = true;
 
 				setTimeout(function(){
-					$("#svg-wheel").addClass("hide-player");
+					$("nav").addClass("hide-player");
 				}, 3000);
 			});
 		}
