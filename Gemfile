@@ -7,7 +7,11 @@ gem "middleman", "~>3.1.6"
 # Live-reloading plugin
 gem "middleman-livereload", "~> 3.1.0"
 
+# Frontend gems
 gem 'middleman-autoprefixer'
+gem 'bourbon'
+gem "breakpoint"
+gem "breakpoint-slicer"
 
 # For faster file watcher updates on Windows:
 gem "wdm", "~> 0.1.0", :platforms => [:mswin, :mingw]
