@@ -95,6 +95,10 @@ VIDEO.VIEW = (function(window){
 
 	view.listenChannelClick = function(){
 
+		$("body").click(function(){
+			$("#svg-wheel").removeClass("hide-player");
+		})
+
 		if(!_isAnyMobile){
 
 			if(!_isSVG){

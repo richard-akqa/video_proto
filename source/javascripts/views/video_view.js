@@ -69,7 +69,7 @@ VIDEO.VIEW = (function(window){
 	view.audioFadeIn = function(audioPlayer){
 		clearInterval(_fadeOutInterval);
 		_fadeInInterval = setInterval(function(){
-			if(_vol < 10){
+			if(_vol < 8){
 				_vol += 1
 				audioPlayer.volume = _vol/10;
 			} else {
@@ -118,8 +118,14 @@ VIDEO.VIEW = (function(window){
 			vidPlayer.one("progress", function(){
 				vidPlayer.currentTime(time);
 				_isFirstPlay = true;
+
+				setTimeout(function(){
+					$("#svg-wheel").addClass("hide-player");
+				}, 3000);
 			});
 		}
+
+		vidPlayer.volume(0.7);
 
 		if(!_isAnyMobile){
 			if(currentTime == 0){
@@ -127,7 +133,7 @@ VIDEO.VIEW = (function(window){
 				onProgressSeek();
 				view.audioTransitionInit(vidPlayer);
 			} else {
-				vidPlayer.currentTime(time);
+				onProgressSeek();
 			}
 		} else {
 			vidPlayer.play();

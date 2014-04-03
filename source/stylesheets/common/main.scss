@@ -39,6 +39,11 @@ nav{
 		left: 50%;
 		margin-left: -150px;
 		margin-top: -150px;
+		opacity: 1;
+		transition: all 1s;
+		&.hide-player{
+			opacity: 0;
+		}
 		.arc{
 			cursor: pointer;
 			.selector{
