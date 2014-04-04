@@ -1,4 +1,4 @@
-	
+/*	
 //THIS LIST GONNA CHANGE ORDER BECAUSE DEPENDING ON THE LIST IN THE VIDEOS.
 {
 	"countries":[
@@ -131,4 +131,4 @@
 			"alias": "URU"
 		}
 	]
-}
+}*/

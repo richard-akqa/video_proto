@@ -72,6 +72,39 @@ VIDEO.VIEW = (function(window){
 		})
 	}
 
+	view.changeVideoOrientation = function(isPortrait){
+		var vidPlayer = videojs("video");
+
+		if(_isAnyMobile){
+			if(isPortrait === true){
+				vidPlayer.src([
+					{type: "video/webm", src: "media/wc_video_m_portrait.webm"},
+					{type: "video/mp4", src: "media/wc_video_m_portrait.mp4"}
+				]);
+			} else {
+				vidPlayer.src([
+					{type: "video/webm", src: "media/wc_video_m_landscape.webm"},
+					{type: "video/mp4", src: "media/wc_video_m_landscape.mp4"}
+				]);
+			}
+		}
+	}
+
+	view.videoInit = function(){
+		var isPortrait = true;
+
+		$(window).on("orientationchange", function(event){
+			if(window.orientation !== 90 || window.orientation !== -90){
+				isPortrait = false;
+			}
+
+			view.changeVideoOrientation(isPortrait);
+		});
+
+		view.changeVideoOrientation(isPortrait);
+		
+	}
+
 	view.onSeekChannel = function(time){
 		var vidPlayer = videojs("video"),
 			channel = undefined;
@@ -80,16 +113,18 @@ VIDEO.VIEW = (function(window){
 		time = time + currentTime%60;
 
 		function onProgressSeek(){
-
 			vidPlayer.one("progress", function(){
 				vidPlayer.currentTime(time);
 				$(".video-control-play").html("PAUSE");
 				_isFirstPlay = true;
 
-				setTimeout(function(){
-					$("nav").addClass("hide-player");
-				}, 3000);
+				if(!_isMobile.iPhone){
+					setTimeout(function(){
+						$("#wheel-controls").addClass("hide-player");
+					}, 3000);
+				}
 			});
+
 		}
 
 		vidPlayer.volume(0.7);
@@ -103,9 +138,9 @@ VIDEO.VIEW = (function(window){
 				onProgressSeek();
 			}
 		} else {
-			vidPlayer.play();
 			if(!_isFirstPlay){
 				//this is for first play in mobile
+				vidPlayer.play();
 				vidPlayer.on("canplay", function(){
 					onProgressSeek();
 					vidPlayer.play();
@@ -113,12 +148,17 @@ VIDEO.VIEW = (function(window){
 				});
 			} else {
 				//this is for 2nd play in mobile
-				onProgressSeek();
+				vidPlayer.play();
+				vidPlayer.one("progress", function(){
+					onProgressSeek();
+				});
+				
 			}
 		}
 	}
 
 	view.init = function(){
+		view.videoInit();
 	};
 
 	$(document).ready(

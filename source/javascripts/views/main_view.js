@@ -1,5 +1,5 @@
-var VIDEO = VIDEO || {}
-VIDEO.VIEW = (function(window){
+var MAIN = MAIN || {}
+MAIN.VIEW = (function(window){
 
 	var view = {};
 

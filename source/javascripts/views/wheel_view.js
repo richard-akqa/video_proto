@@ -38,10 +38,10 @@ VIDEO.VIEW = (function(window){
 			innerRadius = 100,
 			svg = undefined,
 			arcs = undefined,
-			countriesNum = 31,
+			countriesNum = 32,
 			data = [],
-			color = d3.scale.ordinal().domain(["230", "180", "130", "80"])
-			.range(["rgb(230,230,230)", "rgb(180,180,180)", "rgb(130,130,130)" , "rgb(80,80,80)" ]);
+			color = d3.scale.ordinal().domain(["230", "210", "180", "130", "80", "50"])
+			.range(["rgb(230,230,230)", "rgb(200,200,200)", "rgb(170,170,170)", "rgb(130,130,130)" , "rgb(80,80,80)", "rgb(50,50,50)" ]);
 
 		for (var i=0; i< countriesNum; i++){
 			data.push(1);
@@ -96,7 +96,7 @@ VIDEO.VIEW = (function(window){
 	view.listenChannelClick = function(){
 
 		$("body").click(function(){
-			$("nav").removeClass("hide-player");
+			$("#wheel-controls").removeClass("hide-player");
 		})
 
 		if(!_isAnyMobile){
@@ -172,8 +172,8 @@ VIDEO.VIEW = (function(window){
 	};
 
 	view.addChannelInit = function(){
-		var countriesNum = 31,
-			index = 1;
+		var countriesNum = 32,
+			index = 0;
 		
 		for (var i=0; i< countriesNum; i++){
 			var dataTime = 'data-time="' + 60 * (i) + '"';
@@ -193,6 +193,25 @@ VIDEO.VIEW = (function(window){
 		var vidPlayer = videojs("video"),
 			progressOffsetleft = $(".video-control-progress").offset().left;
 
+		vidPlayer.on("loadeddata", function(){
+			$(".video-control-play").html("PLAY");
+		});
+
+		if(_isMobile.iPhone){
+			vidPlayer.one("loadstart", function(){
+				$(".video-control-play").html("PLAY");
+			});
+		}
+		
+		vidPlayer.on("seeking", function(){
+			$(".video-control-play").html("SEEKING");
+			vidPlayer.on("timeupdate", function(){
+				$(".video-control-play").html("PAUSE");
+			});
+		});
+
+
+
 		vidPlayer.on("timeupdate", function(){
 			var duration = vidPlayer.duration();
 				currentTime = vidPlayer.currentTime();
@@ -202,26 +221,27 @@ VIDEO.VIEW = (function(window){
 
 		})
 
-		vidPlayer.on("seeking", function(){
-			$(".video-control-play").hide();
-		});
-
 		$(".video-control-play").click(function(){
 
-			var isPaused = vidPlayer.paused();
+			var isPaused = vidPlayer.paused(),
+				el = this;
+
+			console.log(isPaused);
 
 			if(isPaused){
 				vidPlayer.play();
-				$(this).html("PAUSE");
+				$(el).html("LOADING");
+				vidPlayer.one("timeupdate", function(){
+					$(el).html("PAUSE");
+				});
 			} else {
 				vidPlayer.pause();
-				$(this).html("PLAY");
+				$(el).html("PLAY");
 			}
 		});
 
 		$(".video-control-progress").click(function(event){
 
-			console.log("Hello");
 			var duration = vidPlayer.duration(),
 				positionX = event.pageX - progressOffsetleft,
 				time = (positionX*duration)/100;
