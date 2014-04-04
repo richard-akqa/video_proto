@@ -122,6 +122,8 @@ VIDEO.VIEW = (function(window){
 					setTimeout(function(){
 						$("#wheel-controls").addClass("hide-player");
 					}, 3000);
+				}else{
+					vidPlayer.play();
 				}
 			});
 
@@ -143,16 +145,13 @@ VIDEO.VIEW = (function(window){
 				vidPlayer.play();
 				vidPlayer.on("canplay", function(){
 					onProgressSeek();
-					vidPlayer.play();
 					view.audioTransitionInit(vidPlayer);
 				});
 			} else {
 				//this is for 2nd play in mobile
 				vidPlayer.play();
-				vidPlayer.one("progress", function(){
-					onProgressSeek();
-				});
-				
+				onProgressSeek();
+	
 			}
 		}
 	}
