@@ -32,40 +32,6 @@ VIDEO.VIEW = (function(window){
 		return version;
 	}
 
-	view.addMobileClass = function(windowWidth){
-
-		var androidVersion = view.androidVersion();
-
-		if (androidVersion <= 2.3){
-			$("html").addClass("device-mobile");
-			$("html").addClass("old-android");
-
-		} else if(androidVersion > 2.3){
-			$("html").addClass("device-mobile");
-			$("html").addClass("new-android");
-
-		} else if (_isMobile.iOS) {
-			$("html").addClass("device-mobile");
-			$("html").addClass("ios-mobile");
-
-		} else {
-			$("html").addClass("device-desktop");
-		}
-
-		if(_isMobile.iPhone){
-			$("html").addClass("iPhone");
-		}
-
-		if (_windowWidth > 985){
-			$("html").removeClass("screen-lt-985");
-			$("html").addClass("screen-bt-985");
-		} else if (_windowWidth <= 985) {
-			$("html").removeClass("screen-bt-985");
-			$("html").addClass("screen-lt-985");
-		}
-
-	}
-
 	view.audioFadeIn = function(audioPlayer){
 		clearInterval(_fadeOutInterval);
 		_fadeInInterval = setInterval(function(){
@@ -153,7 +119,6 @@ VIDEO.VIEW = (function(window){
 	}
 
 	view.init = function(){
-		view.addMobileClass();
 	};
 
 	$(document).ready(
