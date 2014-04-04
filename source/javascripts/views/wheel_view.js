@@ -146,7 +146,7 @@ VIDEO.VIEW = (function(window){
 					var pageX = event.originalEvent.changedTouches[0].pageX,
 						pageY = event.originalEvent.changedTouches[0].pageY,
 						endTarget = document.elementFromPoint(pageX, pageY),
-						time = $(this).data("time");
+						time = $(endTarget).data("time");
 
 					clearInterval(_wheelMotionInterval);
 					event.preventDefault();
@@ -176,7 +176,7 @@ VIDEO.VIEW = (function(window){
 			index = 1;
 		
 		for (var i=0; i< countriesNum; i++){
-			var dataTime = 'data-time="' + 60 * (i+1) + '"';
+			var dataTime = 'data-time="' + 60 * (i) + '"';
 			$("nav ul").append('<li><a href="#" '+ dataTime +' class="time"></a></li>')
 		}
 
