@@ -37,6 +37,7 @@ VIDEO.VIEW = (function(window){
 		_fadeInInterval = setInterval(function(){
 			if(_vol < 8){
 				_vol += 1
+				console.log(_vol);
 				audioPlayer.volume = _vol/10;
 			} else {
 				clearInterval(_fadeInInterval);
@@ -49,6 +50,7 @@ VIDEO.VIEW = (function(window){
 		_fadeOutInterval = setInterval(function(){
 			if(_vol > 0){
 				_vol -= 1
+				console.log(_vol);
 				audioPlayer.volume = _vol/10;
 			} else {
 				clearInterval(_fadeOutInterval);
@@ -78,15 +80,30 @@ VIDEO.VIEW = (function(window){
 		if(_isAnyMobile){
 			if(isPortrait === true){
 				vidPlayer.src([
-					{type: "video/webm", src: "media/wc_video_m_portrait.webm"},
-					{type: "video/mp4", src: "media/wc_video_m_portrait.mp4"}
+					{type: "video/mp4", src: "media/wc_video_m_portrait.mp4"},
+					{type: "video/webm", src: "media/wc_video_m_portrait.webm"}
 				]);
 			} else {
 				vidPlayer.src([
-					{type: "video/webm", src: "media/wc_video_m_landscape.webm"},
-					{type: "video/mp4", src: "media/wc_video_m_landscape.mp4"}
+					{type: "video/mp4", src: "media/wc_video_m_landscape.mp4"},
+					{type: "video/webm", src: "media/wc_video_m_landscape.webm"}
 				]);
 			}
+
+			/*
+			RICHARD'S AWS FOR TESTING PURPOSE!!! DON'T MAKE RICHARD PAY :O !
+			if(isPortrait === true){
+				vidPlayer.src([
+					{type: "video/mp4", src: "https://s3-us-west-1.amazonaws.com/fifa-test/videos/wc_video_m_portrait.mp4"},
+					{type: "video/webm", src: "https://s3-us-west-1.amazonaws.com/fifa-test/videos/wc_video_m_portrait.webm"}
+				]);
+			} else {
+				vidPlayer.src([
+					{type: "video/mp4", src: "https://s3-us-west-1.amazonaws.com/fifa-test/videos/wc_video_m_landscape.mp4"},
+					{type: "video/webm", src: "https://s3-us-west-1.amazonaws.com/fifa-test/videos/wc_video_m_landscape.webm"}
+				]);
+			}
+			*/
 		}
 	}
 

@@ -201,6 +201,14 @@ VIDEO.VIEW = (function(window){
 			vidPlayer.one("loadstart", function(){
 				$(".video-control-play").html("PLAY");
 			});
+
+			vidPlayer.on('webkitendfullscreen', function(){
+				console.log("done clicked");
+			}, false);
+
+			vidPlayer.on("fullscreenchange", function(){
+				console.log("hello");
+			})
 		}
 		
 		vidPlayer.on("seeking", function(){
@@ -209,7 +217,6 @@ VIDEO.VIEW = (function(window){
 				$(".video-control-play").html("PAUSE");
 			});
 		});
-
 
 
 		vidPlayer.on("timeupdate", function(){
@@ -225,8 +232,6 @@ VIDEO.VIEW = (function(window){
 
 			var isPaused = vidPlayer.paused(),
 				el = this;
-
-			console.log(isPaused);
 
 			if(isPaused){
 				vidPlayer.play();
