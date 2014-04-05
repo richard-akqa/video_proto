@@ -202,13 +202,9 @@ VIDEO.VIEW = (function(window){
 				$(".video-control-play").html("PLAY");
 			});
 
-			vidPlayer.on('webkitendfullscreen', function(){
-				console.log("done clicked");
-			}, false);
-
-			vidPlayer.on("fullscreenchange", function(){
-				console.log("hello");
-			})
+			vidPlayer.on("pause", function(){
+				$(".video-control-play").html("PLAY");
+			});
 		}
 		
 		vidPlayer.on("seeking", function(){
